@@ -12,37 +12,35 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * @author jiazhen
  * @description: mybatis日志中的sql语句重组(根据mapper中的预编译sql与参数)
- * @author      jiazhen
- * @email       jarzhen@163.com
- * @datetime    2022/8/31 9:00
- * @version:    1.0
+ * @email jarzhen@163.com
+ * @datetime 2022/8/31 9:00
+ * @version: 1.0
  */
 public class RecombineSql {
     @Test
     public void test1() throws IOException {
-//        String filePath = "F:\\workspaces_idea\\toolbox\\src\\test\\resources\\logs\\mybatisSql.log";
         String filePath = Thread.currentThread().getContextClassLoader().getResource("logs/mybatisSql.log").getPath();
         File file = new File(filePath);
         String logs = FileUtils.readFileToString(file, "utf-8");
-        recombineSql(logs);
+        System.out.println(recombineSql(logs));
     }
 
     private String recombineSql(String logs) {
         Pattern pSql = Pattern.compile("(?<=Preparing: )(.*?)\r?\n");
-        Pattern pParameters = Pattern.compile("(?<=Parameters:)(.*?)$");
+        Pattern pParameters = Pattern.compile("(?<=Parameters:)(.*?)(\r?\n|$)");
         Pattern pLocation = Pattern.compile("(?<= ?)(\\?)");
         Pattern pParameter = Pattern.compile("(?<=,? )(.*?)(\\((\\w+)\\))?,");
         Matcher mSql = pSql.matcher(logs);
-        String sql = "";
+        Matcher mParameters = pParameters.matcher(logs);
+        List<String> sqlList = new ArrayList<>();
         while (mSql.find()) {
-            sql = mSql.group(1);
+            String sql = mSql.group(1);
             System.out.println(sql);
             String location;
             String parameter;
             String parameterType;
-
-            Matcher mParameters = pParameters.matcher(logs);
             if (mParameters.find()) {
                 String parametersInlogs = mParameters.group(1);
                 System.out.println(parametersInlogs);
@@ -85,7 +83,8 @@ public class RecombineSql {
                     throw new RuntimeException(String.format("占位符数量[%d]、参数数量[%d]、参数类型数量[%d]不一致，请检查！", l, p, pt));
                 }
             }
+            sqlList.add(sql + ";");
         }
-        return sql;
+        return StringUtils.join(sqlList, "\n");
     }
 }
