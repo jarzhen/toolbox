@@ -44,6 +44,12 @@ public class DateTools {
         json = generateJson("2022-02-02","2022-05-02","quarter");
         System.out.println(json);
     }
+    @Test
+    public void test_other() throws ParseException {
+        String json = "";
+        json = generateJson("2022-02-02","2022-05-02","other");
+        System.out.println(json);
+    }
 
     public String generateJson(String dateStart, String dateEnd, String unit) throws ParseException {
         Calendar calendarStart = convert2Calendar(dateStart);
