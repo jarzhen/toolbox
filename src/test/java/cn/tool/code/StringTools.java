@@ -1,6 +1,8 @@
 package cn.tool.code;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.StringUtils;
@@ -85,6 +87,12 @@ public class StringTools {
         jsonObject.put("leftHas", leftHas);
         jsonObject.put("togetherHas", togetherHas);
         jsonObject.put("rightHas", rightHas);
-        return jsonObject.toJSONString();
+        return fastFormat(jsonObject);
+    }
+
+    public static String fastFormat(JSONObject jsonObject){
+        return JSON.toJSONString(jsonObject, SerializerFeature.PrettyFormat,
+                SerializerFeature.WriteMapNullValue,
+                SerializerFeature.WriteDateUseDateFormat);
     }
 }
