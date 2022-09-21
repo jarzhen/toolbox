@@ -55,6 +55,7 @@ public class MysqlTools {
             String[] split = findInsertExample.split(" VALUES ");
             String valuesTemplate = split[1].replaceAll("\\d+", "?");
             valuesTemplate = valuesTemplate.replaceAll("'.*?'", "'?'");
+            valuesTemplate = valuesTemplate.replaceAll("null", "?");
             sqlTemplate = split[0] + " VALUES " + valuesTemplate;
         }
         System.out.println(sqlTemplate);
