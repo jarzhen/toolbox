@@ -31,7 +31,7 @@ public class MysqlTools {
         String text = FileUtils.readFileToString(textFile, "utf-8");
         String sqls = textToSql(insertExample, text);
         File sqlFile = new File("D:/git_project/toolbox/src/test/resources/mysql/insert.sql");
-        FileUtils.write(sqlFile,sqls,"utf-8");
+        FileUtils.write(sqlFile, sqls, "utf-8");
         System.out.println(sqls);
     }
 
@@ -64,14 +64,19 @@ public class MysqlTools {
             int i = 0;
             String sql = sqlTemplate;
             Matcher mPlaceholder = pPlaceholder.matcher(sql);
-            while (mPlaceholder.find()){
+            while (mPlaceholder.find()) {
                 String find = mPlaceholder.group(0);
-                sql = StringUtils.replaceOnce(sql, find, strings[i]);
+                String replace = strings[i];
+                if (StringUtils.equals("(null)", replace)) {
+                    replace = "null";
+                }
+                sql = StringUtils.replaceOnce(sql, find, replace);
                 i++;
             }
+            sql = StringUtils.replace(sql, "'null'", "null");
             sqlList.add(sql);
         }
 
-        return StringUtils.join(sqlList,"\r\n");
+        return StringUtils.join(sqlList, "\r\n");
     }
 }

@@ -1,2 +1,3 @@
 3	wangwu	24
 1	zhangsan	22
+2	(null)	(null)
