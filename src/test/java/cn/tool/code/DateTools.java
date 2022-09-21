@@ -23,48 +23,67 @@ public class DateTools {
     @Test
     public void test_day() throws ParseException {
         String json = "";
-        json = generateJson("2022-02-02","2022-05-02","day");
+        json = generateJson("2022-03-02","2022-04-02","day");
         System.out.println(json);
     }
     @Test
     public void test_week() throws ParseException {
         String json = "";
-        json = generateJson("2022-02-02","2022-05-02","week");
+        json = generateJson("2022-03-02","2022-04-02","week");
         System.out.println(json);
     }
     @Test
     public void test_month() throws ParseException {
         String json = "";
-        json = generateJson("2022-02-02","2022-05-02","month");
+        json = generateJson("2022-03-02","2022-04-02","month");
         System.out.println(json);
     }
     @Test
     public void test_quarter() throws ParseException {
         String json = "";
-        json = generateJson("2022-02-02","2022-05-02","quarter");
+        json = generateJson("2022-03-02","2022-04-02","quarter");
         System.out.println(json);
     }
     @Test
     public void test_other() throws ParseException {
         String json = "";
-        json = generateJson("2022-02-02","2022-05-02","other");
+        json = generateJson("2022-03-02","2022-04-02","other");
         System.out.println(json);
     }
 
+    @Test
+    public void test_all() throws ParseException {
+        String json = "";
+        json = generateJson("2022-03-02","2022-04-02");
+        System.out.println(json);
+    }
+
+    public String generateJson(String dateStart, String dateEnd) throws ParseException {
+        JSONObject jsonObj = new JSONObject(true);
+        jsonObj.putAll(JSONObject.parseObject(generateJson(dateStart,dateEnd,"day")));
+        jsonObj.putAll(JSONObject.parseObject(generateJson(dateStart,dateEnd,"week")));
+        jsonObj.putAll(JSONObject.parseObject(generateJson(dateStart,dateEnd,"month")));
+        jsonObj.putAll(JSONObject.parseObject(generateJson(dateStart,dateEnd,"quarter")));
+        return StringTools.fastFormat(jsonObj);
+    }
+
     public String generateJson(String dateStart, String dateEnd, String unit) throws ParseException {
+
         Calendar calendarStart = convert2Calendar(dateStart);
         Calendar calendarEnd = convert2Calendar(dateEnd);
         List<Calendar> calendarList = new ArrayList<>();
-        JSONObject jsonObj = new JSONObject();
+        JSONObject jsonObj = new JSONObject(true);
+        jsonObj.put("dateStart",dateStart);
+        jsonObj.put("dateEnd",dateEnd);
         JSONArray jsonArray = new JSONArray();
         switch (unit) {
             case "day":
-                while (!calendarStart.equals(calendarEnd)) {
+                while (!calendarStart.after(calendarEnd)) {
                     calendarList.add((Calendar) calendarStart.clone());
                     calendarStart.add(Calendar.DATE, 1);
                 }
                 for (Calendar calendar : calendarList) {
-                    JSONObject dayObj = new JSONObject();
+                    JSONObject dayObj = new JSONObject(true);
                     dayObj.put("start", convert2StringStart(calendar));
                     dayObj.put("end", convert2StringEnd(calendar));
                     jsonArray.add(dayObj);
@@ -80,8 +99,8 @@ public class DateTools {
                 Calendar weekStart = (Calendar) calendarStart.clone();
                 Calendar weekEnd = (Calendar) calendarStart.clone();
                 weekEnd.add(Calendar.DATE, 6);
-                while (!weekEnd.equals(calendarEnd)) {
-                    JSONObject dayObj = new JSONObject();
+                while (!weekEnd.after(calendarEnd)) {
+                    JSONObject dayObj = new JSONObject(true);
                     dayObj.put("start", convert2StringStart(weekStart));
                     dayObj.put("end", convert2StringEnd(weekEnd));
                     jsonArray.add(dayObj);
@@ -98,7 +117,7 @@ public class DateTools {
                     Calendar monthStart = (Calendar) calendarStart.clone();
                     Calendar monthEnd = (Calendar) calendarStart.clone();
                     monthEnd.set(Calendar.DAY_OF_MONTH, calendarStart.getActualMaximum(Calendar.DAY_OF_MONTH));
-                    JSONObject dayObj = new JSONObject();
+                    JSONObject dayObj = new JSONObject(true);
                     dayObj.put("start", convert2StringStart(monthStart));
                     dayObj.put("end", convert2StringEnd(monthEnd));
                     jsonArray.add(dayObj);
@@ -118,7 +137,7 @@ public class DateTools {
                 tempQuarterEnd.set(Calendar.MONTH, (tempEnd / 3) + 2);
                 tempQuarterEnd.set(Calendar.DAY_OF_MONTH, calendarStart.getActualMaximum(Calendar.DAY_OF_MONTH));
                 while (!tempQuarterEnd.after(calendarEnd)) {
-                    JSONObject dayObj = new JSONObject();
+                    JSONObject dayObj = new JSONObject(true);
                     dayObj.put("start", convert2StringStart(calendarStart));
                     dayObj.put("end", convert2StringEnd(tempQuarterEnd));
                     jsonArray.add(dayObj);
