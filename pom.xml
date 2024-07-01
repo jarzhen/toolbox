@@ -64,6 +64,13 @@
             <scope>test</scope>
         </dependency>
         <!-- Apache POI end -->
+        <!-- https://mvnrepository.com/artifact/org.objectweb.asm/com.springsource.org.objectweb.asm -->
+        <dependency>
+            <groupId>org.objectweb.asm</groupId>
+            <artifactId>com.springsource.org.objectweb.asm</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+
     </dependencies>
 
 </project>

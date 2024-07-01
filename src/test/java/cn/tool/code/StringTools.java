@@ -12,10 +12,9 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author jiazhen
@@ -90,9 +89,69 @@ public class StringTools {
         return fastFormat(jsonObject);
     }
 
-    public static String fastFormat(JSONObject jsonObject){
+    public static String fastFormat(JSONObject jsonObject) {
         return JSON.toJSONString(jsonObject, SerializerFeature.PrettyFormat,
                 SerializerFeature.WriteMapNullValue,
                 SerializerFeature.WriteDateUseDateFormat);
+    }
+
+    @Test
+    public void test() {
+        for (int i = 0; i < 20; i++) {
+            String msgid = "00000000" + StringUtils.repeat("1", i);
+            System.out.println(msgid.substring(msgid.length() - 8));
+        }
+    }
+
+    @Test
+    public void test2() {
+        Map<String, List<String>> data = new HashMap<>();
+
+        List<String> data1 = new ArrayList<>();
+        // 添加数据
+        data1.add("value1");
+        data1.add("value2");
+        data1.add("value3");
+
+        List<String> data2 = new ArrayList<>();
+        // 添加数据
+        data2.add("value1");
+        data2.add("value2");
+        // 添加数据
+        data.put("key1", data1);
+        data.put("key2", data2);
+        int sum = data.entrySet().stream().mapToInt(entry -> entry.getValue().size()).sum();
+        // 打印数据
+        System.out.println(sum);
+    }
+
+    @Test
+    public void test3() {
+        Pattern pattern = Pattern.compile("^(TRUE|FALS)$");
+        List<String> list = new ArrayList<>();
+        list.add("TRUE");
+        list.add("TRUES");
+        list.add("ATRUE");
+        list.add("ATRUES");
+        list.add("FALS");
+        list.add("FALSS");
+        list.add("AFALS");
+        list.add("AFALSS");
+        for (String s : list) {
+            System.out.println(s.matches("^(TRUE|FALS)$"));
+        }
+    }
+
+    @Test
+    public void test4() {
+        String s = "1";
+        switch (s) {
+            case "0":
+                throw new RuntimeException("0");
+            case "1":
+                throw new RuntimeException("1");
+            case "2":
+                throw new RuntimeException("2");
+        }
     }
 }
