@@ -154,4 +154,36 @@ public class StringTools {
                 throw new RuntimeException("2");
         }
     }
+    @Test
+    public void test5() {
+        String[] strArray = new String[]{"1", "2", "3"};
+        System.out.println(Arrays.toString(strArray));
+    }
+
+    @Test
+    public void test6() {
+        if (StringUtils.isNotEmpty("")) {
+            System.out.println("[]isNotEmpty:true");
+        } else {
+            System.out.println("[]isNotEmpty:false");
+        }
+        System.out.println(String.format("[%s]","".charAt(0)));
+    }
+
+    @Test
+    public void test7() {
+        String substring = StringUtils.substring("1234567887654321", -8);
+        System.out.println(String.format("1234567887654321报文标识号:%s",substring));
+        substring = StringUtils.substring("7654321", -8);
+        System.out.println(String.format("7654321报文标识号:%s",substring));
+        substring = StringUtils.substring("1234567887654321", 0,8);
+        System.out.println(String.format("1234567887654321工作日:%s",substring));
+        substring = StringUtils.substring("7654321", 0,8);
+        System.out.println(String.format("7654321工作日:%s",substring));
+    }
+
+    @Test
+    public void test8() {
+        System.out.println(1<=2);
+    }
 }
