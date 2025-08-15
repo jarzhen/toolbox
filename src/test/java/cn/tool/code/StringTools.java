@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
@@ -15,6 +16,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author jiazhen
@@ -154,6 +156,7 @@ public class StringTools {
                 throw new RuntimeException("2");
         }
     }
+
     @Test
     public void test5() {
         String[] strArray = new String[]{"1", "2", "3"};
@@ -167,23 +170,50 @@ public class StringTools {
         } else {
             System.out.println("[]isNotEmpty:false");
         }
-        System.out.println(String.format("[%s]","".charAt(0)));
+        System.out.println(String.format("[%s]", "".charAt(0)));
     }
 
     @Test
     public void test7() {
         String substring = StringUtils.substring("1234567887654321", -8);
-        System.out.println(String.format("1234567887654321报文标识号:%s",substring));
+        System.out.println(String.format("1234567887654321报文标识号:%s", substring));
         substring = StringUtils.substring("7654321", -8);
-        System.out.println(String.format("7654321报文标识号:%s",substring));
-        substring = StringUtils.substring("1234567887654321", 0,8);
-        System.out.println(String.format("1234567887654321工作日:%s",substring));
-        substring = StringUtils.substring("7654321", 0,8);
-        System.out.println(String.format("7654321工作日:%s",substring));
+        System.out.println(String.format("7654321报文标识号:%s", substring));
+        substring = StringUtils.substring("1234567887654321", 0, 8);
+        System.out.println(String.format("1234567887654321工作日:%s", substring));
+        substring = StringUtils.substring("7654321", 0, 8);
+        System.out.println(String.format("7654321工作日:%s", substring));
     }
 
     @Test
     public void test8() {
-        System.out.println(1<=2);
+        System.out.println(1 <= 2);
+    }
+
+    @Test
+    public void test9() {
+        String msg = "sdfsadfssadfsdfsdsds sdfsdfsf cncc.123.001.01sdfsadfssadfsdfsdsds sdfsdfsf ";
+        Pattern pattern = Pattern.compile(".*?(\\w{4}\\.\\d{3}\\.\\d{3}\\.\\d{2}).*?");
+        Matcher matcher = pattern.matcher(msg);
+        if (matcher.find())
+            System.out.println(matcher.group(1));
+    }
+    @Test
+    public void test10(){
+        String[] arr = new String[]{"1.txt.exe", "2.txt.jsp", "3.txt"};
+        for (int i = 0; i < arr.length; i++) {
+            String suffix = FilenameUtils.getExtension(arr[i]);
+            System.out.println(suffix);
+        }
+    }
+
+    @Test
+    public void test11() {
+        List<Integer> intList = Arrays.asList(1, 2, 3);
+        String result = intList.stream()
+                .map(n -> String.valueOf(n))
+                .collect(Collectors.joining(";", "", ""));
+
+        System.out.println(result);
     }
 }

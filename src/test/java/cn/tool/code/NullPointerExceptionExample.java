@@ -11,7 +11,8 @@ public class NullPointerExceptionExample {
         try {
             method1();
         }catch (Exception e){
-            log.error(e.getMessage(),e);
+            log.error("exception occurred:{}",e.getMessage());
+            log.error(e.getMessage(),e);    
         }
     }
 
